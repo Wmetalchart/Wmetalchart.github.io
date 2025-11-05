@@ -8,7 +8,7 @@
     ></script>
     <style type="text/css">
       #mynetwork {
-        width: 100%; height: 500px;
+        width: 100%; height: 550px;
         border: 1px solid lightgray
       }
     </style>
@@ -18,21 +18,34 @@
     <script type="text/javascript">
       // create an array with nodes ;
       var nodes = new vis.DataSet([
-        { id: 1, label: "Lode 1" },
-        { id: 2, label: "Node 2" },
-        { id: 3, label: "Node 3" },
-        { id: 4, label: "Node 4" },
-        { id: 5, label: "Node 5" },
+        { id: 1, 
+		label: "Node 1", 
+		shape: "circularImage", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16}
+		},
+        { id: 2, label: "Node 2", shape: "box" },
+        { id: 3, label: "Node 3", shape: "box" },
+        { id: 4, label: "Node 4", shape: "box" },
+        { id: 5, label: "Node 5", shape: "box" },
       ]);
 
       // create an array with edges
       var edges = new vis.DataSet([
-        { from: 1, to: 3 },
-        { from: 1, to: 2 },
-        { from: 2, to: 4 },
-        { from: 2, to: 5 },
-        { from: 3, to: 3 },
-      ]);
+        { from: 1, to: 3, color: "red", label: "Conexion 1", id: "edge1"},
+        { from: 1, to: 2, label: "Conexion 2", id: "edge2"},
+        { from: 2, to: 4, label: "Conexion 3", id: "edge3" },
+        { from: 2, to: 5, label: "Conexion 4", id: "edge4"},
+        ]);
+	// Definir las URLs para cada conexión
+      var edgeUrls = {
+        "edge1": "https://youtu.be/LVl0mcEu1r8?si=wRced2WtZlY2Lm_r",  // 
+        "edge2": "https://youtu.be/wE8B_wuSsaY?si=pC4UQv5lL0H62mxT",  // 
+        "edge3": "https://youtu.be/0jttv6pILMc?si=DL97paCOCQjuC-9Y",  // 
+        "edge4": "https://youtu.be/YrEAN63NFgQ?si=xwZzPMFXJvkrSIsI"   // 
+      };
+
 
       // create a network
       var container = document.getElementById("mynetwork");
@@ -42,6 +55,52 @@
       };
       var options = {};
       var network = new vis.Network(container, data, options);
+	  
+	   // Agregar el evento click para todas las conexiones
+      network.on("click", function(params) {
+        if (params.edges.length > 0) {
+          var edgeId = params.edges[0];
+          var url = edgeUrls[edgeId];
+          if (url) {
+            // Abrir el video en nueva pestaña
+            window.open(url, "_blank");
+          }
+        }
+      });
+	  function createAndShowNotice() {
+      // build DOM
+      const overlay = document.createElement('div');
+      overlay.className = 'notice-overlay';
+      overlay.id = 'siteNoticeOverlay';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+
+      overlay.innerHTML = `
+        <div class="notice-box" role="document" aria-labelledby="noticeTitle">
+          <button class="notice-close" aria-label="Close notice" id="noticeCloseBtn">&times;</button>
+          <h3 id="noticeTitle" style="text-align: center; font-size:20px;" class="notice-title">Welcome to the Women Rock & Metal Chart Chart</h3>
+          <div class="notice-body" style="font-size: 16px; line-height: 1.5;";>
+            <br>This is a fan-made project to show <br>
+          </div>
+          <div class="notice-actions">
+            <div class="notice-skip">
+              <label><input type="checkbox" id="dontShowAgain"> Don't show again</label>
+            </div>
+            <div>
+              <button class="notice-btn" id="noticeGotIt">Got it</button>
+            </div>
+          </div>
+        </div>
+      `;
+       
+         document.body.appendChild(overlay);
+       
+         // Close logic
+         const close = () => overlay.remove();
+         overlay.querySelector('.notice-close').addEventListener('click', close);
+         overlay.querySelector('.notice-btn').addEventListener('click', close);
+         overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    }
     </script>
   </body>
 </html>
