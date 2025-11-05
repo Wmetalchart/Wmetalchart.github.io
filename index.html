@@ -222,22 +222,6 @@
       overlay.setAttribute('role', 'dialog');
       overlay.setAttribute('aria-modal', 'true');
 
-      overlay.innerHTML = `
-        <div class="notice-box" role="document" aria-labelledby="noticeTitle">
-          <button class="notice-close" aria-label="Close notice" id="noticeCloseBtn">&times;</button>
-          <h3 id="noticeTitle" style="text-align: center; font-size:20px;" class="notice-title">Welcome to the Woso Relationship Chart</h3>
-          <div class="notice-body" style="font-size: 16px; line-height: 1.5;";>
-            <strong>Disclaimer</strong><br>This is a fan-made project that is <strong> not 100% accurate</strong>.<br>All information is compiled from publicly available sources such as open accounts and interviews. The rumor category consists purely of fan speculation and should <strong>not be treated as factual</strong>.<br> If any player featured wishes to be removed or corrected, please <a href="https://linktr.ee/wosochart"target="_blank" rel="noopener noreferrer">contact me</a> directly.<br>
-          </div>
-          <div class="notice-actions">
-            <div class="notice-skip">
-              <label><input type="checkbox" id="dontShowAgain"> Don't show again</label>
-            </div>
-            <div>
-              <button class="notice-btn" id="noticeGotIt">Got it</button>
-            </div>
-          </div>
-        </div>
       `;
 
       // append
@@ -438,7 +422,7 @@
       const raw = document.getElementById("lname").value || "";
       if (!raw.trim()) return;
     
-      // Parse criteria the same way filterGraph() does
+      // Parse criteria the same way Graph() does
       const criteria = [];
       const regex = /(?:\b(team|group|label|name):(?:"([^"]+)"|'([^']+)'|([^\s,]+))|"(.*?)"|'(.*?)'|([^\s,]+))/gi;
       let m;
@@ -612,29 +596,7 @@
      overlay.className = 'notice-overlay';
      overlay.id = 'featuresOverlay';
     
-     overlay.innerHTML = `
-        <div class="notice-box" role="dialog" aria-labelledby="featuresTitle">
-         <button class="notice-close" aria-label="Close features">&times;</button>
-         <h3 id="featuresTitle" class="notice-title" style="text-align:center;">Features</h3>
-         <div class="notice-body">
-           <ul style="padding-left:20px; line-height:1.6; margin:0;">
-            <strong>Search & Filtering</strong>
-            <li> Smart search bar: Find players, teams, or countries by name or keyword.</li>
-            <li>Advanced filters: Combine multiple terms like "Arsenal" + "England".</li>
-            <li>Context expansion: Automatically includes directly connected players when filtering, so you see relationships, not just matches.</li>
-            <li>Cycle through results: When multiple matches exist, click again to jump between them.</li>
-            <li>Reset graph: Instantly return to the full global view.</li>		
-			<strong>Interaction & Motion</strong>		
-			<li>Physics toggle: Pause or resume network motion to explore clusters comfortably.</li>
-			<li>Hide Isolated Toggle: Declutter the graph by removing players with no active connections (works dynamically within any filtered view).</li>
-			<li>Drag & explore: Move players manually to rearrange your view without breaking the layout.</li>	<strong>Player Info & Tooltips</strong>
-			<li>Hover tooltips: Instantly see name, team, country, and longest connection chain.</li>		<li>Highlight persistence: Hovered players and paths remain visible until you hover elsewhere.</li>		
-			</ul>
-         </div>
-         <div style="text-align:right; margin-top:10px;">
-           <button class="notice-btn">Close</button>
-         </div>
-        </div>
+
         `;
        
          document.body.appendChild(overlay);
@@ -755,9 +717,8 @@
   </head>
   <body>
     <form action="javascript:void(0);">
-      <input type="text" id="lname" placeholder="Player, team, and/or country" style="width:180px">
+      <input type="text" id="lname" placeholder="Name" style="width:180px">
       <button type="button" class="action" onclick="highlightNode()">Search</button>
-      <button type="button" class="action" onclick="filterGraph()">Filter</button>
       <button type="button" class="action" onclick="resetGraph()">Reset</button>
       <button type="button" class="action" onclick="togglePhysics()"><i id="physicsIcon" class="fas fa-pause"></i></button> 
 	  <label style="display: flex; align-items: center; justify-content: space-between; margin-top:5px; width: 100%; gap: 8px;">
@@ -767,7 +728,6 @@
         <span class="slider round"></span>
       </div>
       </label>
-	  <button type="button" class="action" onclick="showFeaturesModal()">Features</button>
     </form>
     
     <div id="mynetwork"></div>
