@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Women Rock & Metal Chart Chart</title>
+    <title>Women Rock & Metal Chart</title>
     <script
       type="text/javascript"
       src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"
     ></script>
     <style type="text/css">
       #mynetwork {
-        width: 100%; height: 550px;
-        border: 1px solid lightgray
+        width: 100%; height: 100vh;
       }
+	 
 	   /* Estilos para el notice-box */
       #welcome-notice {
         position: fixed;
@@ -64,6 +64,59 @@
         background: rgba(0,0,0,0.5);
         z-index: 999;
       }
+	  /* Estilos para el panel de información */
+	  #info-panel {
+		position: fixed;
+		top: 20px;
+		left: 20px;
+		background: rgba(255, 255, 255, 0.95);
+		border: 2px solid #333;
+		border-radius: 10px;
+		padding: 15px;
+		box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+		z-index: 999;
+		font-family: Arial, sans-serif;
+		max-width: 300px;
+		backdrop-filter: blur(5px);
+	  }
+
+	  #info-panel h3 {
+		margin-top: 0;
+		color: #333;
+		border-bottom: 1px solid #ccc;
+		padding-bottom: 8px;
+	  }
+
+	  #info-panel ul {
+		margin: 10px 0;
+		padding-left: 20px;
+	  }
+
+	  #info-panel li {
+		margin-bottom: 8px;
+		line-height: 1.4;
+		color: #666;
+	  }
+
+	  #info-panel strong {
+		color: #333;
+	  }
+
+	  #toggle-info {
+		background: #4CAF50;
+		color: white;
+		border: none;
+		padding: 8px 15px;
+		border-radius: 5px;
+		cursor: pointer;
+		font-size: 14px;
+		width: 100%;
+		margin-top: 10px;
+      }
+
+	  #toggle-info:hover {
+		background: #45a049;
+	  }
     </style>
   </head>
   <body>
@@ -73,11 +126,25 @@
     <!-- Notice-box de bienvenida -->
     <div id="welcome-notice">
       <h2>¡Bienvenido/a!</h2>
-      <p>Explora nuestro gráfico de conexiones de Rock & Metal. Haz clic en las conexiones para descubrir videos musicales relacionados.</p>
-      <button id="close-notice">Disfruta</button>
+      <p>Este es un gráfico que busca representar las colaboraciones entre mujeres del rock y el metal. Es un proyecto en continuo desarrollo y las sugerencias son bien recibidas. Puedes dejarlas en los comentarios de este <a href="https://docs.google.com/spreadsheets/d/1OjdQ-AznZyPsc0hsTuRlSFP2FnFkaMLZ/edit?gid=1073058989#gid=1073058989" target="_blank" style="color: #0066cc; font-weight: bold;">documento</a>.</p>
+      <button id="close-notice">Disfruta 🤘🎸</button>
     </div>
 
     <div id="mynetwork"></div>
+	<!-- Panel de información -->
+	<div id="info-panel">
+    <h3>Controles del Gráfico</h3>
+    <ul> 
+		<li><strong>Leyenda:</strong> Las lineas <span style="color: red; font-weight: bold;">rojas</span> representan colaboraciones de estudio, mientras que las <span style="color: green; font-weight: bold;">verdes</span>, colaboraciones en directo</li>
+        <li><strong>Zoom:</strong> Utiliza la rueda del ratón</li>
+        <li><strong>Mover:</strong> Haz clic y arrastra para mover el gráfico</li>
+		<li><strong>Arrastrar:</strong> Arrastra los cuadrados para una mejor vista del nombre de las canciones</li>
+        <li><strong>Información sobre las artistas:</strong> Manten el cursor sobre el cuadrado correspondiente</li>
+        <li><strong>Reproducir canciones:</strong> Haz clic en la línea correspondiente</li>
+        <li><strong>Resetear vista:</strong> Doble clic en un área vacía</li>
+    </ul>
+    <button id="toggle-info">Ocultar Panel</button>
+	</div>
     <script type="text/javascript">
       // Esperar a que el DOM esté completamente cargado
       document.addEventListener('DOMContentLoaded', function() {
@@ -87,35 +154,305 @@
           document.getElementById('overlay').style.display = 'none';
         });
       });
-
+	        // Control del panel de información
+    var panel = document.getElementById('info-panel');
+    var button = document.getElementById('toggle-info');
+    var isPanelVisible = true; // Variable para rastrear el estado
+    
+    document.getElementById('toggle-info').addEventListener('click', function() {
+        if (isPanelVisible) {
+            panel.style.display = 'none';
+            button.textContent = 'Mostrar Panel';
+            isPanelVisible = false;
+        } else {
+            panel.style.display = 'block';
+            button.textContent = 'Ocultar Panel';
+            isPanelVisible = true;
+        }
+    });
       // create an array with nodes ;
       var nodes = new vis.DataSet([
         { id: 1, 
-		label: "Node 1", 
-		shape: "circularImage", 
+		label: "Lzzy Hale", 
+		shape: "box", 
 		image: "", 
 		color: {"border": "hsl(0, 100%, 0%)"},
-		font: {"color": "#000", "size": 16}
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Halestorm"
 		},
-        { id: 2, label: "Node 2", shape: "box" },
-        { id: 3, label: "Node 3", shape: "box" },
-        { id: 4, label: "Node 4", shape: "box" },
-        { id: 5, label: "Node 5", shape: "box" },
+        { id: 2, 
+		label: "Cristina Scabbia", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Lacuna Coil"
+		},
+        { id: 3, 
+		label: "Taylor Momsen", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: The Pretty Reckless"
+		},
+        { id: 4, 
+		label: "Courtney Laplante", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo:\niwrestledabearonce (Anteriormente)\nSpiritbox"
+		},
+        { id: 5, 
+		label: "Emily Armstrong", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo:\nDead Sara\nLinkin Park"
+		},
+		{ id: 6, 
+		label: "Poppy", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Artista en solitario"
+		},
+		{ id: 7, 
+		label: "Maria Brink", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: In This Moment"
+		},
+		{ id: 8, 
+		label: "Alissa White-Gluz", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo:\nThe Agonist (Anteriormente)\nArch Enemy"
+		},
+		{ id: 9, 
+		label: "Sharon den Adel", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Within Temptation"
+		},
+		{ id: 10, 
+		label: "Tarja", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo:\nNightwish (Anteriormente)\nArtista en solitario"
+		},
+		{ id: 11, 
+		label: "Simone Simmons", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Epica"
+		},
+		{ id: 12, 
+		label: "BABYMETAL", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Miembros:\nSU-METAL\nMOA-METAL\nMOMO-METAL (desde 2023)\nYUI-METAL (se retiró en 2018)"
+		},
+		{ id: 13, 
+		label: "The Warning", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Miembros:\nDaniela Villarreal (Vocalista y guitarrista)\nPaulina Villarreal (Baterista y ocasionalente vocalista)\nAlejandra Villarreal (bajista)"
+		},
+		{ id: 14, 
+		label: "BAND-MAID", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Miembros:\nMiku Kobato (Vocalista y guitarrista)\nKanami Tōno (Guitarrista)\nAkane Hirose (Baterista)\nMisa (Bajista)\nSaiki Atsumi (Vocalista principal) (desde 2013)"
+		},
+		{ id: 15, 
+		label: "Ash Costello", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: New Years Day"
+		},
+		{ id: 16, 
+		label: "Nita Strauss", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Guitarrista"
+		},
+		{ id: 17, 
+		label: "Dorothy", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Artista en solitario"
+		},
+		{ id: 18, 
+		label: "Lynn Gunn", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: PVRIS"
+		},
+		{ id: 19, 
+		label: "Kasey Karlsen", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Deadlands"
+		},
+		{ id: 20, 
+		label: "Jules & Jyl Wylde", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: The Pretty Wild"
+		},
+		{ id: 21, 
+		label: "Tatiana Shmailyuk", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Jinjer"
+		},
+		{ id: 22, 
+		label: "Floor Jansen", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo:\nAfter Foverer (Anteriormente)\nNightwish"
+		},
+		{ id: 23, 
+		label: "Amy Lee", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Evanescence"
+		},
+		{ id: 24, 
+		label: "Elize Ryd", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Amaranthe"
+		},
+		{ id: 25, 
+		label: "Angela Gossow", 
+		shape: "box", 
+		image: "", 
+		color: {"border": "hsl(0, 100%, 0%)"},
+		font: {"color": "#000", "size": 16},
+		title: "Grupo: Arch Enemy (Anteriormente)"
+		},
       ]);
 
       // create an array with edges
       var edges = new vis.DataSet([
-        { from: 1, to: 3, color: "red", label: "Conexion 1", id: "edge1"},
-        { from: 1, to: 2, label: "Conexion 2", id: "edge2"},
-        { from: 2, to: 4, label: "Conexion 3", id: "edge3" },
-        { from: 2, to: 5, label: "Conexion 4", id: "edge4"},
+        { from: 1, to: 3, color: "red", label: "We Will Rock You", id: "edge1", width: 3},
+        { from: 1, to: 7, color: "red", label: "We Will Rock You", id: "edge2", width: 3},
+        { from: 1, to: 13, color: "green", label: "Familiar Taste of Poison", id: "edge3", width: 3},
+        { from: 1, to: 13, color: "green", label: "Here's to Us", id: "edge4", width: 3},
+		{ from: 1, to: 15, color: "red", label: "Only Happy When It Rains", id: "edge5", width: 3},
+		{ from: 1, to: 15, color: "green", label: "Here's to Us", id: "edge6", width: 3},
+		{ from: 1, to: 16, color: "red", label: "Through The Noise", id: "edge7", width: 3},
+		{ from: 1, to: 17, color: "green", label: "I Just Wanna Make Love to You", id: "edge8", width: 3},
+		{ from: 1, to: 23, color: "red", label: "Break In", id: "edge9", width: 3},
+		{ from: 1, to: 23, color: "green", label: "Heavy", id: "edge10", width: 3},
+		{ from: 2, to: 10, color: "red", label: "Goodbye Stranger", id: "edge11", width: 3},
+		{ from: 2, to: 11, color: "green", label: "Storm The Sorrow", id: "edge12", width: 3},
+		{ from: 2, to: 15, color: "red", label: "In the Mean Time", id: "edge13", width: 3},
+		{ from: 3, to: 7, color: "red", label: "We Will Rock You", id: "edge14", width: 3},
+		{ from: 4, to: 6, color: "green", label: "Soft Spine", id: "edge15", width: 3},
+		{ from: 4, to: 6, color: "red", label: "End of You", id: "edge16", width: 3},
+		{ from: 4, to: 12, color: "red", label: "My Queen", id: "edge17", width: 3},
+		{ from: 4, to: 18, color: "red", label: "My House", id: "edge18", width: 3},
+		{ from: 4, to: 21, color: "green", label: "Circle With Me", id: "edge19", width: 3},
+		{ from: 4, to: 23, color: "red", label: "End of You", id: "edge20", width: 3},
+		{ from: 5, to: 6, color: "green", label: "One Step Closer", id: "edge21", width: 3},
+		{ from: 5, to: 18, color: "green", label: "Burn It Down", id: "edge22", width: 3},
+		{ from: 6, to: 12, color: "red", label: "from me to u", id: "edge23", width: 3},
+		{ from: 6, to: 23, color: "red", label: "End of You", id: "edge24", width: 3},
+		{ from: 8, to: 10, color: "red", label: "Demons in You", id: "edge25", width: 3},
+		{ from: 8, to: 11, color: "red", label: "Cradle To The Grave", id: "edge26", width: 3},
+		{ from: 8, to: 16, color: "red", label: "The Wolf You Feed", id: "edge27", width: 3},
+		{ from: 9, to: 10, color: "red", label: "Paradise (What About Us?)", id: "edge28", width: 3},
+		{ from: 9, to: 22, color: "red", label: "Beyond Me", id: "edge29", width: 3},
+		{ from: 9, to: 23, color: "green", label: "The Reckoning", id: "edge30", width: 3},
+		{ from: 13, to: 14, color: "red", label: "Show Them", id: "edge31", width: 3},
+		{ from: 13, to: 15, color: "green", label: "Here's to Us", id: "edge32", width: 3},
+		{ from: 16, to: 17, color: "red", label: "Victorious", id: "edge33", width: 3},
+		{ from: 19, to: 20, color: "red", label: "Kundalini", id: "edge34", width: 3},
+		{ from: 24, to: 25, color: "red", label: "Do Or Die", id: "edge35", width: 3},
+		{ from: 8, to: 12, color: "red", label: "Distortion", id: "edge36", width: 3},
+		{ from: 1, to: 23, color: "green", label: "Bring Me To Life", id: "edge37", width: 3}
         ]);
 	// Definir las URLs para cada conexión
       var edgeUrls = {
-        "edge1": "https://youtu.be/LVl0mcEu1r8?si=wRced2WtZlY2Lm_r",  // 
-        "edge2": "https://youtu.be/wE8B_wuSsaY?si=pC4UQv5lL0H62mxT",  // 
-        "edge3": "https://youtu.be/0jttv6pILMc?si=DL97paCOCQjuC-9Y",  // 
-        "edge4": "https://youtu.be/YrEAN63NFgQ?si=xwZzPMFXJvkrSIsI"   // 
+        "edge1": "https://youtu.be/4ivF-cdqxjQ?si=W2Miflh4Q7GNQ1hS",  // We Will Rock You
+        "edge2": "https://youtu.be/4ivF-cdqxjQ?si=W2Miflh4Q7GNQ1hS",  // We Will Rock You
+        "edge3": "https://youtu.be/dgsMTGb3nLk?si=6iFscPyWwaJV9lNM",  // Familiar Taste of Poison
+        "edge4": "https://youtu.be/cL2pWSs8gVo?si=EIHvWZWoRgxeEXH8",  // Here's to Us
+        "edge5": "https://youtu.be/v3rnKuWdPmw?si=amgxMMTfXaFAei2B",  // Only Happy When It Rains
+	    "edge6": "https://youtu.be/cL2pWSs8gVo?si=EIHvWZWoRgxeEXH8",  // Here's to Us
+		"edge7": "https://youtu.be/7LtEy-yYyA4?si=g5UFM3fv6Mm6hXkP",  // Through The Noise
+		"edge8": "https://youtu.be/u_vLlb0o8nw?si=6glhb25jNS7sWVRg",  // I Just Wanna Make Love to You
+		"edge9": "https://youtu.be/OUuVReJSrc4?si=kvCHXPUZePditmqa",  // Break In
+		"edge10": "https://youtu.be/7rTI56m7WE4?si=yP1VBIc9c9to9BZ7",  // Heavy
+		"edge11": "https://youtu.be/f1te50Ohi0o?si=g2AXa-1YjVtF9Ul-",  // Goodbye Stranger
+		"edge12": "https://youtu.be/qifPX3DUM-A?si=iJdrQl25vjbf49hw",  // Storm The Sorrow
+		"edge13": "https://youtu.be/63z4mNFXJGY?si=VRcafbsny4Dj7umX",  // In the Mean Time
+		"edge14": "https://youtu.be/4ivF-cdqxjQ?si=W2Miflh4Q7GNQ1hS",  // We Will Rock You
+		"edge15": "https://youtu.be/C1UMck7le4g?si=9zSHviMcDNIix2ln",  // Soft Spine
+		"edge16": "https://youtu.be/3rS83uI0Wak?si=xk1EpnagrQhIKhBT",  // End of You
+		"edge17": "https://youtu.be/6MWlBf2lhno?si=11EqeBt_qOOZ2VFZ",  // My Queen
+		"edge18": "https://youtu.be/WlnW1KLTAHw?si=he3LJbSTG0vYg6R4",  // My House
+		"edge19": "https://youtu.be/TK81YePqfZE?si=ptTxegoJi0kPH-gA",  // Circle With Me
+		"edge20": "https://youtu.be/3rS83uI0Wak?si=xk1EpnagrQhIKhBT",  // End of You	
+		"edge21": "https://youtu.be/6dAoD6I0zk8?si=3wIr80DNUPoMmVSf",  // One Step Closer	
+		"edge22": "https://youtu.be/lGe_kUPg57Y?si=oflGEpv16-K3UwvL",  // Burn It Down	
+		"edge23": "https://youtu.be/qayP_YUrf9I?si=HXI2vCD2C_5Jbxsl",  // from me to u	
+		"edge24": "https://youtu.be/3rS83uI0Wak?si=xk1EpnagrQhIKhBT",  // End of You	
+		"edge25": "https://youtu.be/M9Dwd9IKiM8?si=xnX-MH3EovVbmfBt",  // Demons in You	
+		"edge26": "https://youtu.be/UgiWNrOH1-0?si=MIk3IjQ6rTER_LR1",  // Cradle To The Grave	
+		"edge27": "https://youtu.be/YYQ02OP5h00?si=VI37GNMrScUqBJj-",  // The Wolf You Feed	
+		"edge28": "https://youtu.be/Dy6MpsDPKts?si=xDOxVjIxYBBVcJ9i",  // Paradise (What About Us?)	
+		"edge29": "https://youtu.be/fISHsKhnSL4?si=reoz6w9oE5QXq0b1",  // Beyond Me	
+		"edge30": "https://youtu.be/koj0GRhs284?si=D1ur9-UgT_Vx8OJi",  // The Reckoning	
+		"edge31": "https://youtu.be/LVl0mcEu1r8?si=wRced2WtZlY2Lm_r",  // Show Them
+		"edge32": "https://youtu.be/cL2pWSs8gVo?si=EIHvWZWoRgxeEXH8",  // Here's to Us	
+		"edge33": "https://youtu.be/1oaeTi9poBU?si=iFFVlEbWDKPIwns1",  // Victorious	
+		"edge34": "https://youtu.be/jaskiDsbKkw?si=pHRkv6XPuqXgqA2r",  // Kundalini	
+		"edge35": "https://youtu.be/iZweNFWbegI?si=I-e3LOi-9fHWv02s",  // Do Or Die
+		"edge36": "https://youtu.be/qw0Lj7y30tg?si=oMeJYhUrYiCS03ay",  // Distortion	
+		"edge37": "https://youtu.be/8D6YuWmEsKY?si=qHomoKJFst-jI_gz",  // Bring Me To Life
       };
 
 
@@ -125,20 +462,24 @@
         nodes: nodes,
         edges: edges,
       };
-      var options = {};
+      var options = {
+		edges: {
+			width: 3
+		}
+	  };
       var network = new vis.Network(container, data, options);
-	  
+	 
 	   // Agregar el evento click para todas las conexiones
-      network.on("click", function(params) {
-        if (params.edges.length > 0) {
-          var edgeId = params.edges[0];
-          var url = edgeUrls[edgeId];
-          if (url) {
-            // Abrir el video en nueva pestaña
-            window.open(url, "_blank");
-          }
-        }
-      });
+		network.on("click", function(params) {
+			console.log("Clic en:", params); // Para debuggear
+		if (params.edges.length > 0 && params.nodes.length === 0) {
+			var edgeId = params.edges[0];
+			var url = edgeUrls[edgeId];
+			if (url) {
+				window.open(url, "_blank");
+			}
+		}
+		});
     </script>
   </body>
 </html>
